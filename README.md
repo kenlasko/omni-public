@@ -1,5 +1,5 @@
 # Introduction
-This repository is used to install a Talos Kubernetes cluster using on-prem Omni in a declarative manner. Most of these steps should work without modification. Obviously paths and domain names should change as required.
+This repository is used to install a [Talos](https://github.com/siderolabs/talos) Kubernetes cluster using on-prem [Omni](https://github.com/siderolabs/omni) in a declarative manner. Most of these steps should work without modification. Obviously paths and domain names should change as required.
 
 In my situation, I have 6 NUCs/mini-PCs that I use for my cluster. Three are old Intel NUCs that are used as control planes. The other 3 are Beelink mini-PCs. My desire was to setup an easily reproducible Talos Kubernetes cluster and maintain my creative node name strategy of NUC1 through NUC6. 
 
