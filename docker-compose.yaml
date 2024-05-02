@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  omni:
+    image: ghcr.io/siderolabs/omni:v0.34.0
+    container_name: omni
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    command:
+      - --account-id=fad87c3a-8c48-4803-bc06-5ad62dde2415
+      - --name=onprem-omni
+      - --cert=/tls.crt
+      - --key=/tls.key
+      - --siderolink-api-cert=/tls.crt
+      - --siderolink-api-key=/tls.key
+      - --private-key-source=file:///omni.asc
+      - --event-sink-port=8091
+      - --bind-addr=0.0.0.0:4443
+      - --siderolink-api-bind-addr=0.0.0.0:8090
+      - --k8s-proxy-bind-addr=0.0.0.0:8100
+      - --advertised-api-url=https://omni.mydomain.com/
+      - --siderolink-api-advertised-url=https://omni.mydomain.com:8090/
+      - --siderolink-wireguard-advertised-addr=192.168.1.17:50180
+      - --advertised-kubernetes-proxy-url=https://omni.mydomain.com:8100/
+      - --auth-auth0-enabled=true
+      - --auth-auth0-domain=mydomain.us.auth0.com
+      - --auth-auth0-client-id=<INSERT-CLIENTID-HERE>
+      - --initial-users=myemail@mydomain.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.omni.rule=HostRegexp(`omni.mydomain.com`)"
+      - "traefik.http.routers.omni.entrypoints=websecure"
+      - "traefik.http.routers.omni.tls=true"
+      - "traefik.http.services.omni.loadbalancer.server.port=4443"
+      - "traefik.http.services.omni.loadbalancer.server.scheme=https"
+    volumes:
+      - ./omni/etcd:/_out/etcd
+      - ./certs/star_mydomain_com.pem:/tls.crt
+      - ./certs/star_mydomain_com.key:/tls.key
+      - ./omni/omni.asc:/omni.asc
+      - /dev/net/tun:/dev/net/tun
+
+  traefik:
+    container_name: traefik
+    image: traefik
+    restart: always
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker
+      - --providers.file.directory=/configuration/
+      - --providers.file.watch=true
+      - --api
+      - --serversTransport.insecureSkipVerify=true
+      - --metrics.prometheus.addrouterslabels=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs"
+      - "./traefik/config:/configuration"
+      - "./traefik/logs/traefik.log:/var/log/traefik.log"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '300M'
+    labels:
+      # Dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik-rpi1.mydomain.com`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls=true"
+
+      # global redirect to https
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+
+      # middleware redirect
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+      # other stuff
+      - "org.label-schema.group=rpi1-container"
+
+    extra_hosts: 
+      - host.docker.internal:172.19.0.1
+    networks:
+      - ipv6
+
+networks:
+  ipv6:
+    enable_ipv6: false
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/24
+          gateway: 172.19.0.1

@@ -1,0 +1,14 @@
+machine:
+  kubelet:
+    extraMounts:
+    - destination: /var/mariadb
+      type: bind
+      source: /var/mariadb
+      options:
+      - bind
+      - rshared
+      - rw
+  install:
+    disk: /dev/sda
+    extraKernelArgs:
+    - net.ifnames=0

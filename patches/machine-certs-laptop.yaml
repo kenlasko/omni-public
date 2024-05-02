@@ -1,0 +1,3 @@
+machine:
+  certSANs:
+  - kube-laptop.mydomain.com 

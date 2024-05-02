@@ -1,0 +1,67 @@
+kind: Cluster
+name: lab
+talos:
+  version: v1.7.1
+kubernetes:
+  version: 1.29.4
+features:
+  enableWorkloadProxy: true
+patches:
+  - name: cluster-base
+    file: /home/ken/omni/patches/cluster.yaml
+  - name: cluster-certs
+    file: /home/ken/omni/patches/cluster-certs-lab.yaml
+    
+---
+kind: ControlPlane
+machines:
+  - 899d9b00-98e9-4972-b9f4-1a6408cd9111  # Lab1
+  - a00e69ba-5e1d-470f-a217-4e9fc492cfe8  # Lab2
+  - 9c781809-bc2a-49c4-b0f4-020778207855  # Lab3
+patches:
+  - name: controlplane-base
+    file: /home/ken/omni/patches/controlplane.yaml
+  - name: machine-certs
+    file: /home/ken/omni/patches/machine-certs-lab.yaml
+  - name: registries
+    file: /home/ken/omni/patches/machine-registries.yaml
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/util-linux-tools
+---
+kind: Workers
+name: workers
+machines: []
+patches: []
+
+---
+kind: Machine
+name: 899d9b00-98e9-4972-b9f4-1a6408cd9111
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "lab1"
+
+---
+kind: Machine
+name: a00e69ba-5e1d-470f-a217-4e9fc492cfe8
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "lab2"
+
+---
+kind: Machine
+name: 9c781809-bc2a-49c4-b0f4-020778207855
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "lab3"
+
+

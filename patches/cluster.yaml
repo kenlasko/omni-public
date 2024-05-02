@@ -1,0 +1,47 @@
+cluster:
+  network:
+    cni:
+      name: none
+  apiServer:
+    admissionControl:
+      - name: PodSecurity
+        configuration:
+          apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+          defaults:
+            audit: baseline
+            audit-version: latest
+            enforce: baseline
+            enforce-version: latest
+            warn: baseline
+            warn-version: latest
+          exemptions:
+            namespaces:
+              - cert-manager
+              - cilium
+              - cilium-test
+              - homeassist
+              - intel-gpu
+              - longhorn
+              - monitoring
+              - tailscale
+              - velero
+            runtimeClasses: []
+            usernames: []
+          kind: PodSecurityConfiguration
+  proxy:
+    disabled: true
+  allowSchedulingOnControlPlanes: true
+  inlineManifests:
+  - name: local-path
+    contents: |
+      ---
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: local-path
+      provisioner: rancher.io/local-path
+      volumeBindingMode: WaitForFirstConsumer
+      reclaimPolicy: Retain
+  # extraManifests:
+  # - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+  # - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml

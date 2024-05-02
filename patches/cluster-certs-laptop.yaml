@@ -1,0 +1,4 @@
+cluster:
+  apiServer:
+    certSANs:
+    - kube-laptop.mydomain.com 

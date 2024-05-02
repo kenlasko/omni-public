@@ -1,0 +1,108 @@
+kind: Cluster
+name: home
+talos:
+  version: v1.7.1
+kubernetes:
+  version: 1.29.4
+features:
+  enableWorkloadProxy: true
+  backupConfiguration:
+    interval: 4h
+patches:
+  - name: cluster-base
+    file: /home/ken/omni/patches/cluster.yaml
+  - name: cluster-certs
+    file: /home/ken/omni/patches/cluster-certs-home.yaml
+
+---
+kind: ControlPlane
+machines:
+  - 4e211131-23e7-f477-9437-94c691a76e7c  # NUC1
+  - 11b61e33-615e-b264-459a-94c691a81113  # NUC2
+  - 375c6280-f387-11ee-8fd7-a05890310d00  # NUC3
+patches:
+  - name: controlplane-base
+    file: /home/ken/omni/patches/controlplane.yaml
+  - name: machine-certs
+    file: /home/ken/omni/patches/machine-certs-home.yaml
+  - name: registries
+    file: /home/ken/omni/patches/machine-registries.yaml
+
+---
+kind: Workers
+name: workers
+machines:
+  - 97a2d280-f38e-11ee-980a-d4742c7d1a00  # NUC4
+  - a0011900-f433-11ee-b7fb-0d3ea5620600  # NUC5
+  - 464e1e00-f436-11ee-8bb0-bd5bcd350500  # NUC6
+patches:
+  - name: worker-base
+    file: /home/ken/omni/patches/worker.yaml
+  - name: certs
+    file: /home/ken/omni/patches/machine-certs-home.yaml
+  - name: registries
+    file: /home/ken/omni/patches/machine-registries.yaml
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/util-linux-tools
+  - siderolabs/i915-ucode
+
+---
+kind: Machine
+name: 4e211131-23e7-f477-9437-94c691a76e7c
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc1"
+
+---
+kind: Machine
+name: 11b61e33-615e-b264-459a-94c691a81113
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc2"
+
+---
+kind: Machine
+name: 375c6280-f387-11ee-8fd7-a05890310d00
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc3"
+
+---
+kind: Machine
+name: 97a2d280-f38e-11ee-980a-d4742c7d1a00
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc4"
+
+---
+kind: Machine
+name: a0011900-f433-11ee-b7fb-0d3ea5620600
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc5"
+
+---
+kind: Machine
+name: 464e1e00-f436-11ee-8bb0-bd5bcd350500
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "nuc6"

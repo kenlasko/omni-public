@@ -1,0 +1,20 @@
+machine:
+  kubelet:
+    extraMounts:
+    - destination: /var/lib/longhorn
+      type: bind
+      source: /var/lib/longhorn
+      options:
+      - bind
+      - rshared
+      - rw
+    - destination: /var/mariadb
+      type: bind
+      source: /var/mariadb
+      options:
+      - bind
+      - rshared
+      - rw
+  install:
+    extraKernelArgs:
+    - net.ifnames=0

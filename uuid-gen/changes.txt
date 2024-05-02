@@ -1,0 +1,248 @@
+
+                                 BIOS Changes History
+      
+
+General Information:
+
+        M1UJ9xxUSA is Flash CD ROM image.
+        M1UJTxxUSA is Flash in UEFI Shell zip package.
+        M1UJYxxUSA is Flash in Windows utility.
+        NOTE: All changes carry forward.  That is, if a change is added in 01,it is also in 02, 03 etc.
+
+This file will be updated from the beginning with first Production BIOS release
+
+CHANGES for M1UKT75A / WU Version 1.0.0.117
+- Enhancement to address security vulnerability CVE-2023-25756, CVE-2023-22329, CVE-2023-34470.
+- Enhancement to address security vulnerability LEN-141561, LEN-141562.
+
+CHANGES for M1UKT74A / WU Version 1.0.0.116
+- Enhancement to address security vulnerability CVE-2023-39539.
+- Autopilot marker fix.
+- Fix some BIOS update issues.
+
+CHANGES for M1UKT73A / WU Version 1.0.0.115
+- Enhancement to address security vulnerability CVE-2021-38578, CVE-2022-36763, CVE-2022-36764, CVE-2022-36765, CVE-2021-38575, CVE-2023-0464, CVE-2023-0465.
+- Enhancement to address security vulnerability CVE-2022-40982,CVE-2022-37343,CVE-2022-44611,CVE-2022-27879,CVE-2022-38083,CVE-2022-43505.
+- Enhancement to address security vulnerability LEN-119525, LEN-123566, LEN-124703, LEN-124704
+- Update CPU microcode.
+
+CHANGES for M1UKT72A / WU Version 1.0.0.114
+- Enhancement to address security vulnerability LEN-113892.
+- Enhancement to address security vulnerability CVE-2022-38087, CVE-2022-33894, CVE-2023-25494, CVE-2023-0286,CVE-2022-4304,CVE-2022-4203,CVE-2023-0215,CVE-2022-4450.
+- Correct a problem with a warm boot BIOS update using the SCCM parameter.
+- Improve Error 0x81 message when flashing same/older BIOS ROM.
+
+CHANGES for M1UKT71A / WU Version 1.0.0.113
+- Enhancement to address security vulnerability LEN-99937,LEN-99938, LEN-99939, LEN-99940, LEN-99942, LEN-103978, LEN-105118, LEN-105119, LEN-107837, LEN-107838, LEN-113890, LEN-113891
+- Enhancement to address security vulnerability CVE-2022-36348,CVE-2022-36794, CVE-2022-38090, CVE-2021-38578, CVE-2022-4854
+
+CHANGES for M1UKT70A
+  - Enhancement to address security vulnerability.
+  - Update CPU microcode.
+  
+CHANGES for M1UKT6EA
+  - Enhancement to address security vulnerability.
+
+CHANGES for M1UKT6BA
+  - Enhancement to address security vulnerability.
+  - Update CPU microcode.
+  - Fix PXE boot failure issue.
+
+CHANGES for M1UKT6AA
+  - Enhancement to address security vulnerability.
+  - Fix fail to change power on logo issue.
+
+CHANGES for M1UKT69A
+  - Enhancement to address security vulnerability.
+
+CHANGES for M1UKT68A
+  - Enhancement to address security vulnerability.
+  - Update CPU microcode.
+
+CHANGES for M1UKT67A
+  - Enhancement to address security vulnerability.
+  - Update UEFI DIAG to 4.20.000.
+
+CHANGES for M1UKT66A
+  - Enhancement to address security vulnerability.
+  - Update CPU microcode.
+
+CHANGES for M1UKT65A
+  - Enhancement to address security vulnerability.
+  - Update CPU microcode.
+  - Optimized IPV6 disable function.
+
+CHANGES for M1UKT62A
+  - Fix WinMagic issue.
+
+CHANGES for M1UKT5FA
+  - Enhance NVMe SSD support.
+
+CHANGES for M1UKT5EA
+  - Fix Ubuntu 20.04 rand freeze issue.
+  - Fix BIOS SETUP issue.
+  
+CHANGES for M1UKT5DA
+  - Update CPU Microcode.
+
+CHANGES for M1UKT5CA
+  - Enhancement to address security vulnerability.
+
+CHANGES for M1UKT5AA
+  - Enhancement to address security vulnerability.
+  - Fix COM port data transmission issue.
+
+CHANGES for M1UKT59A
+  - Enhance HDD password support.
+
+CHANGES for M1UKT57A 
+  - Enhancement to address security vulnerability.
+  - Update CPU Microcode.
+
+CHANGES for M1UKT56A
+  - Enhance C State support.
+
+CHANGES for M1UKT55A
+  - Enhancement to address security vulnerability.
+  - Enhance BIOS SETUP support.
+
+CHANGES for M1UKT53A
+  - Enhancement to address security vulnerability.
+  - Update UEFI DIAG to 4.12.001
+
+CHANGES for M1UKT52A 
+  - Enhancement to address security vulnerability.
+  - Update CPU Microcode.
+
+CHANGES for M1UKT50A
+  - Enhancement to address security vulnerability.
+  - Enhance NVMe SSD detection.
+
+CHANGES for M1UKT4FA
+  - Enhancement to address security vulnerability.
+  - Update UEFI DIAG to 4.11.
+
+CHANGES for M1UKT4EA
+  - Fix some TIO multi display issue for M920x.
+  - Enhancement to address security vulnerability.
+  - Update Setup layout.
+
+CHANGES for M1UKT4BA
+  - Enhancement to address security vulnerability.
+  - Update CPU Microcode.
+
+CHANGES for M1UKT4AA
+  - Enhancement to address security vulnerability.
+  - Enhance BIOS SETUP support.
+
+CHANGES for M1UKT47A
+  - Enhancement to address security vulnerability.
+  - Enhance BIOS SETUP support.
+
+CHANGES for M1UKT45A
+  - Enhance Smart USB Protection support.
+  - Prevents a hang in POST.
+  - Fixes the IPv4/IPv6 repeating "v" messaging in F12 menu.
+  - Prevents flashing to BIOS levels prior to version 44A.
+
+CHANGES for M1UKT43A
+  - IPV4 and IPV6 boot options improvement to fix POST hangs.
+  - Update UEFI DIAG to 4.08.03.
+
+CHANGES for M1UKT42A
+  - Enhance WMI support.
+  - Update UEFI DIAG to 4.08.
+
+CHANGES for M1UKT40A
+  - Enhance Intel(R) RST with Intel(R) Optane support. 
+  - Enhance WMI support.
+  - Update Intel(R) RST Pre-OS to 17.3.0.4019.
+
+CHANGES for M1UKT39A
+  - [Important] Update includes security fixes
+  - Enhance Intel(R) Manageability feature support.
+  - Enhance Bootblock Recovery support.
+
+CHANGES for M1UKT37A
+  - Enhance Bootblock Recovery support.
+  - Enhance TIO support.
+  - Fix MEBx related issue.
+
+CHANGES for M1UKT35A
+  - Update CPU Microcode.
+  - Fix some ME issues.
+
+CHANGES for M1UKT33A
+  - Add 8 Core CPU support.
+  - Add new CPU mircocode M22906ED_000000AA.
+  - Update RST driver to 17.0.0.1051.
+  - Update GOP to 9.0.1080.
+
+CHANGES for M1UKT28A
+  - Fix some WMI issues.
+  - Fix some BIOS SETUP issues.
+  - Enhance SCCM BIOS update support.
+
+CHANGES for M1UKT26A
+  - Enhance customized logo support.
+  - Enhance Windows UEFI firmware update support. 
+
+CHANGES for M1UKT23A
+  - Update some BIOS SETUP issues.
+  - Enhance WMI support. 
+
+CHANGES for M1UKT22A
+  - Enhance WMI support.
+  - Update UEFI DIAG to 4.05. 
+
+CHANGES for M1UKT21A
+  - Enhance WMI support.
+  - Fix event log cleared issue.
+  - Update UEFI DIAG to 4.04. 
+
+CHANGES for M1UKT1FA
+  - Fix some SMBIOS issues.
+
+CHANGES for M1UKT1DA
+  - Update MEBx.
+  - Fix system fan may spin high after resume from suspend.
+  - Enhance Thunderbolt support.
+
+CHANGES for M1UKT1BA
+  - Fix some BIOS SETUP layout issues.
+  - Fix some SMBIOS issues.
+  - Enhance Thunderbolt support.
+
+CHANGES for M1UKT1AA
+  - Fix some WOL issue.
+  - Enhance SCCM BIOS deployment support.
+
+CHANGES for M1UKT18A
+  - Enhance Thunderbolt support.
+  - Enhance SCCM BIOS deployment support.
+  - Enhance remote BIOS update support.
+
+CHANGES for M1UKT17A
+  - Fix some display issues.
+  - Enhance WMI support.
+  - Enhance Intel(R) Manageability feature support.
+  - Fix TIO touch function abnormal issue.
+
+CHANGES for M1UKT16A
+  - Enhance WMI support.
+  - Enhance Thunderbolt support.
+  - Enhance TIO support.
+  - Update CPU microcode.
+
+CHANGES for M1UKT12A
+  - Enhance WMI support.
+  - Fix some Bootblock Recovery issues.
+  - Fix some firmware TPM related issues.
+
+CHANGES for M1UKT11A
+  - Enhance WMI support.
+  - Enhance BIOS Windows Update support.
+  - Enhance Thunderbolt support.
+
+CHANGES for M1UKT0FA
+  - Initial Production BIOS release.
