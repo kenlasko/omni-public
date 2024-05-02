@@ -72,7 +72,7 @@ I used PXEBoot and Matchbox for this. I will publish how I did this some other t
 
 Once you're ready for creating your cluster, run the below command from your workstation. Yep, that's it.
 ```
-omnictl cluster template sync -f ~/omni/cluster-(home|lab|laptop).yaml
+omnictl cluster template sync -f ~/omni/cluster-home.yaml
 ```
 Then install Cilium using whatever method you desire. In my case, I used an Ansible script to install the core apps that would allow me to log into ArgoCD and install everything else:
 - Cilium
