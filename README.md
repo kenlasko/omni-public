@@ -21,8 +21,8 @@ sudo chmod u+x /usr/local/bin/omnictl /usr/local/bin/talosctl
 ```
 2. Download omniconfig.yaml and talosconfig.yaml from omni.mydomain.com and put in proper locations on your workstation.
 ```
-mv omniconfig.yaml /home/ken/.config/omni/config
-mv talosconfig.yaml /home/ken/.talos/config
+mv omniconfig.yaml ~/.config/omni/config
+mv talosconfig.yaml ~/.talos/config
 ```
 # Omni/Kubectl installation
 Assumes Kubectl is already installed.
@@ -39,7 +39,7 @@ Assumes Kubectl is already installed.
 )
 ```
 
-2. Add Krew to ~/.bashrc
+2. Add Krew path to bottom of ~/.bashrc
 ```
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 ```
@@ -54,7 +54,8 @@ source ~/.bashrc
 kubectl krew install oidc-login
 ```
 
-5. Install wslu (for WSL browser redirection, if your workstation is using Windows Subsystem for Linux)
+## Using Windows Subsystem for Linux
+Install wslu (for WSL browser redirection)
 ```
 sudo apt install wslu -y
 ```
@@ -80,3 +81,31 @@ Then install Cilium using whatever method you desire. In my case, I used an Ansi
 - Cert Manager
 
 The repo that contains all that is currently private. I may expose it once I'm confident all secrets are gone.
+
+## Using remote SSH shell for kubectl
+If you're using a remote SSH shell to connect to the cluster, add the following to your ```~/.ssh/config```
+```
+Host myhost
+  LocalForward 8000 127.0.0.1:8000
+  LocalForward 18000 127.0.0.1:18000
+```
+Add ```- --skip-open-browser``` to the Omni user account in the ```Users:``` section of your ```~/.kube/config``` for Omni as in the example below:
+```
+users:
+- name: onprem-omni-home-ken.lasko@gmail.com
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - oidc-login
+      - get-token
+      - --oidc-issuer-url=https://omni.mydomain.com/oidc
+      - --oidc-client-id=native
+      - --oidc-extra-scope=cluster:home
+      - --skip-open-browser
+      command: kubectl
+      env: null
+      interactiveMode: IfAvailable
+      provideClusterInfo: false
+
+```
