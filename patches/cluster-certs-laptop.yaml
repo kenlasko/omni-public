@@ -1,4 +1,4 @@
 cluster:
   apiServer:
     certSANs:
-    - kube-laptop.mydomain.com 
+    - kube-laptop.mydomain.com  # This is for a Kube API backdoor that doesn't require Omni to access. Not strictly required. 
