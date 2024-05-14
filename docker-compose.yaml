@@ -9,7 +9,7 @@ services:
     cap_add:
       - NET_ADMIN
     command:
-      - --account-id=fad87c3a-8c48-4803-bc06-5ad62dde2415
+      - --account-id=<yourAccountID>
       - --name=onprem-omni
       - --cert=/tls.crt
       - --key=/tls.key
