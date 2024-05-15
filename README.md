@@ -103,5 +103,37 @@ users:
       env: null
       interactiveMode: IfAvailable
       provideClusterInfo: false
-
 ```
+
+# Omni Backup/Restore
+It is important to backup the Omni etcd database as well as the omni.asc key in case of disaster. Here is a simple script to back this up. Requires installation of etcdctl client.
+
+## Installing etcdctl client on Ubuntu/Raspbian
+```
+sudo apt install etcd-client
+```
+## Sample Backup Script
+This script takes a snapshot of the etcd database as well as the entire contents of the Omni folder. Keeps daily, weekly and monthly backups. This example goes to a NAS folder mount. 
+Add to crontab to run it daily.
+```
+#!/bin/sh
+
+ETCDCTL_API=3 etcdctl snapshot save /docker/omni/snapshot.db
+day=$(date +%A)
+dayofmonth=$(date +%-d)
+echo "$(date +%F_%T) Backing up Omni etcd database..."
+sudo zip -r /mnt/omni-backup/etcdbackup-$day.zip /docker/omni/
+if [ "$dayofmonth" -eq 1 ]; then echo "Creating monthly backup..."; cp /mnt/omni-backup/etcdbackup-$day.zip /mnt/omni-backup/etcdbackup-monthly-$(date +%m).zip; fi
+case $dayofmonth in 7|14|21|28) echo "Creating weekly backup..."; cp /mnt/omni-backup/etcdbackup-$day.zip /mnt/omni-backup/etcdbackup-weekly-$dayofmonth.zip; ;; *) ;; esac
+echo "$(date +%F_%T) Omni etcd database has been backed up."
+```
+
+## Restoring Omni
+1. Copy the omni.asc file to the omni folder on your Docker host
+2. Copy the snapshot.db to the root of your Docker folder
+3. Run the following commands to restore the Omni database:
+```
+ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
+mv default.etcd etcd
+```
+4. Start the Omni container. 
