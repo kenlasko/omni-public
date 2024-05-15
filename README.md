@@ -106,7 +106,7 @@ users:
 ```
 
 # Omni Backup/Restore
-It is important to backup the Omni etcd database as well as the omni.asc key in case of disaster. Here is a simple script to back this up. Requires installation of etcdctl client.
+It is important to backup the Omni etcd database as well as the ```omni.asc``` key in case of disaster. Here is a simple script to back this up. Requires installation of ```etcdctl``` client.
 
 ## Installing etcdctl client on Ubuntu/Raspbian
 ```
@@ -129,8 +129,8 @@ echo "$(date +%F_%T) Omni etcd database has been backed up."
 ```
 
 ## Restoring Omni
-1. Copy the omni.asc file to the omni folder on your Docker host
-2. Copy the snapshot.db to the root of your Docker folder
+1. Copy ```omni.asc``` to the ```omni``` folder on your Docker host (or wherever the Omni Docker folder resides)
+2. Copy ```snapshot.db``` to the root of your Docker folder
 3. Run the following commands to restore the Omni database:
 ```
 ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
