@@ -130,9 +130,10 @@ echo "$(date +%F_%T) Omni etcd database has been backed up."
 
 ## Restoring Omni
 1. Copy ```omni.asc``` to the ```omni``` folder on your Docker host (or wherever the Omni Docker folder resides)
-2. Copy ```snapshot.db``` to the root of your Docker folder
+2. Copy ```snapshot.db``` to the ```omni``` folder on your Docker host
 3. Run the following commands to restore the Omni database:
 ```
+cd /docker/omni
 ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
 mv default.etcd etcd
 ```
