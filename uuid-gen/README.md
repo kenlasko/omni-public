@@ -8,4 +8,4 @@ Tested to work on Beelink U59 Pro and Mini S12 Pro
 
 Use at your own risk.
 
-Originally obtained from inside [`m1ujt73usa.zip` for the Lenovo ThinkStation P330 Tiny download center](https://support.lenovo.com/us/en/downloads/ds503907-flash-bios-update-thinkcentre-m720t-m720s-m720q-m920t-m920s-m920q-m920x-thinkstation-p330-tiny).
+Originally obtained from inside [`m1ujt73usa.zip` for the Lenovo ThinkStation P330 Tiny download center](https://support.lenovo.com/us/en/downloads/ds503907-flash-bios-update-thinkcentre-m720t-m720s-m720q-m920t-m920s-m920q-m920x-thinkstation-p330-tiny). The ```/efi/boot/startup.nsh``` was modified to run the UUID randomize command instead of the BIOS flash.
