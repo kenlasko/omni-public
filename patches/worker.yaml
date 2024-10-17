@@ -19,5 +19,5 @@ machine:
     extraKernelArgs:
     - net.ifnames=0
   nodeLabels:
-    storage: longhorn
-    intel.feature.node.kubernetes.io/gpu: true
+    storage: longhorn                           # Used for specifying which nodes to use for Longhorn.
+    intel.feature.node.kubernetes.io/gpu: true  # Used to denote nodes that have an Intel GPU that can be used with the Intel GPU operator. Used for Plex transcoding

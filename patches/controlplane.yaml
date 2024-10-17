@@ -9,6 +9,5 @@ machine:
       - rshared
       - rw
   install:
-    disk: /dev/sda
     extraKernelArgs:
     - net.ifnames=0
