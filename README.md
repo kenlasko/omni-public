@@ -66,8 +66,8 @@ source ~/.bashrc
 kubectl krew install oidc-login
 ```
 
-## Using Windows Subsystem for Linux
-Install wslu (for WSL browser redirection)
+## Browser Redirection for Windows Subsystem for Linux
+If you're using WSL, install `wslu`. This allows for external browser redirection from the WSL session to your main browser in Windows
 ```
 sudo apt install wslu -y
 ```
