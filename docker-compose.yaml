@@ -1,6 +1,14 @@
 version: '3.8'
-
 services:
+  dumpcerts:
+    image: registry.mydomain.com/dumpcerts:latest
+    container_name: dumpcerts
+    restart: always
+    command: "/certs/acme.json /certs"
+    volumes:
+      - ./certs:/certs
+
+
   omni:
     image: ghcr.io/siderolabs/omni:v0.34.0
     container_name: omni
@@ -13,8 +21,8 @@ services:
       - --name=onprem-omni
       - --cert=/tls.crt
       - --key=/tls.key
-      - --siderolink-api-cert=/tls.crt
-      - --siderolink-api-key=/tls.key
+      - --machine-api-cert=/tls.crt
+      - --machine-api-key=/tls.key
       - --private-key-source=file:///omni.asc
       - --event-sink-port=8091
       - --bind-addr=0.0.0.0:4443
@@ -22,7 +30,7 @@ services:
       - --k8s-proxy-bind-addr=0.0.0.0:8100
       - --advertised-api-url=https://omni.mydomain.com/
       - --siderolink-api-advertised-url=https://omni.mydomain.com:8090/
-      - --siderolink-wireguard-advertised-addr=192.168.1.17:50180
+      - --siderolink-wireguard-advertised-addr=omni.mydomain.com:50180
       - --advertised-kubernetes-proxy-url=https://omni.mydomain.com:8100/
       - --auth-auth0-enabled=true
       - --auth-auth0-domain=mydomain.us.auth0.com
@@ -42,6 +50,7 @@ services:
       - ./omni/omni.asc:/omni.asc
       - /dev/net/tun:/dev/net/tun
 
+
   traefik:
     container_name: traefik
     image: traefik
@@ -49,48 +58,51 @@ services:
     command:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      - --providers.docker
-      - --providers.file.directory=/configuration/
-      - --providers.file.watch=true
-      - --api
+      - --providers.docker=true
+      - --api.dashboard=true
+      - --log.level=INFO
+      - --log.filePath=/var/log/traefik.log
       - --serversTransport.insecureSkipVerify=true
-      - --metrics.prometheus.addrouterslabels=true
+      # Set up LetsEncrypt
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.email=youremail@gmail.com
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      # Set up an insecure listener that redirects all traffic to TLS
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      # Set up the TLS configuration for our websecure listener
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=*.mydomain.com
+    environment:
+      - CLOUDFLARE_EMAIL=youremail@gmail.com
+      - CLOUDFLARE_DNS_API_TOKEN=<CLOUDFLARE_TOKEN>
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./certs:/certs"
-      - "./traefik/config:/configuration"
+      - "./certs:/letsencrypt"
       - "./traefik/logs/traefik.log:/var/log/traefik.log"
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: '300M'
     labels:
       # Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`traefik-rpi1.mydomain.com`)"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.enable=true"
+      - 'traefik.http.routers.traefik.rule=Host(`traefik-rpi1.mydomain.com`)'
       - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls=true"
-
-      # global redirect to https
-      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - 'traefik.http.routers.traefik.middlewares=strip'
+      - 'traefik.http.middlewares.strip.stripprefix.prefixes=/traefik'
       # middleware redirect
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-
-      # other stuff
-      - "org.label-schema.group=rpi1-container"
-
-    extra_hosts: 
+    extra_hosts:
       - host.docker.internal:172.19.0.1
     networks:
       - ipv6
+
 
 networks:
   ipv6:

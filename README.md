@@ -9,14 +9,30 @@ Once complete, you will have a Kubernetes cluster running the latest Kubernetes 
 # Omni On-Prem Installation
 I installed Omni on a Raspberry Pi I'm using for other Docker-related stuff.
 1. Follow the [Omni on-prem install instructions](https://omni.siderolabs.com/how-to-guides/self_hosted).
-2. Configure [docker-compose.yaml](docker-compose.yaml) file
-3. Make sure omni.mydomain.com is added to whatever is being used to serve DNS
+2. Configure [docker-compose.yaml](docker-compose.yaml) file:
+   * The most important app is obviously `omni`
+   * `traefik` is used for HTTPS traffic management and generates certificates via LetsEncrypt
+   * The `dumpcerts` app creates .pem files from the LetsEncrypt certificates that can be consumed by Omni. See the next section for more information.
+3. Make sure an A record pointing to `omni.mydomain.com` is added to whatever is being used to serve DNS
+
+## Certificate Management
+Omni requires a public certificate for nodes to connect to. It is very important to keep this certificate up-to-date, or else things will start to go very bad when the certificate expires. When nodes reboot with an expired Omni certificate, Kubernetes pods will react in strange ways that will be hard to diagnose.
+
+The `Traefik` section of my `docker-compose` file uses certificates issued by LetsEncrypt, but these certificates aren't available in file format that can be consumed by the Omni container. To get around this, I use a container called `dumpcerts` to regularly create/update `.pem` files from the LetsEncrypt certificate. Omni then consumes these certificates. The `dumpcerts` container is a home-built container defined in my [Docker repository](dumpcerts)
 
 # Omnictl/Talosctl installation
 1. Download omnictl and talosctl from https://omni.mydomain.com and put in proper locations on your workstation.
+For AMD machines:
 ```
 sudo mv omnictl-linux-amd64 /usr/local/bin/omnictl
 sudo mv talosctl-linux-amd64 /usr/local/bin/talosctl
+sudo chmod u+x /usr/local/bin/omnictl /usr/local/bin/talosctl
+```
+
+For ARM machines:
+```
+sudo mv omnictl-linux-arm64 /usr/local/bin/omnictl
+sudo mv talosctl-linux-arm64 /usr/local/bin/talosctl
 sudo chmod u+x /usr/local/bin/omnictl /usr/local/bin/talosctl
 ```
 2. Download omniconfig.yaml and talosconfig.yaml from omni.mydomain.com and put in proper locations on your workstation.
