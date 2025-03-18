@@ -1,6 +1,0 @@
-FROM debian:stable-slim
-WORKDIR /prog
-RUN mkdir /certs && apt update && apt install util-linux openssl jq -y
-COPY ./data/dumpcerts.sh /prog
-RUN chmod u+x dumpcerts.sh 
-ENTRYPOINT ["/prog/dumpcerts.sh"]
